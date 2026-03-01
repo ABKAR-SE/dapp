@@ -4,6 +4,88 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Atlas Valley</title>
+  <script>
+
+const SUPABASE_URL = "https://bsgmplcnlqezuaxpjfsj.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzZ21wbGNubHFlenVheHBqZnNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNDExNDcsImV4cCI6MjA4NzkxNzE0N30.9-q2LgNL6ZmQjxopTViv3T7SGWU_W1unSiw0xjVyyEE";
+
+const { createClient } = supabase;
+
+const supabaseClient =
+createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
+
+const telegramUser =
+tg.initDataUnsafe?.user?.id ||
+Math.floor(Math.random()*999999);
+
+document.getElementById("user")
+.innerText =
+"Telegram ID: " + telegramUser;
+
+async function initUser(){
+
+let { data } =
+await supabaseClient
+.from("users")
+.select("*")
+.eq("telegram_id", telegramUser)
+.single();
+
+if(!data){
+
+const { data:newUser } =
+await supabaseClient
+.from("users")
+.insert({
+telegram_id: telegramUser,
+xp:0,
+level:1
+})
+.select()
+.single();
+
+window.currentUser = newUser;
+
+}else{
+window.currentUser = data;
+}
+
+updateUI();
+}
+
+function updateUI(){
+document.getElementById("xp")
+.innerText =
+window.currentUser.xp;
+}
+
+async function gainXP(){
+
+let newXP =
+window.currentUser.xp + 10;
+
+await supabaseClient
+.from("users")
+.update({ xp:newXP })
+.eq("telegram_id", telegramUser);
+
+window.currentUser.xp = newXP;
+
+updateUI();
+
+tg.HapticFeedback.impactOccurred("medium");
+}
+
+initUser();
+
+</script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://unpkg.com/@tonconnect/ui@2.0.7/dist/tonconnect-ui.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
