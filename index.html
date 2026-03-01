@@ -10,11 +10,21 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
+
 body{
+margin:0;
 background:#0b0f1a;
 color:white;
 font-family:Arial;
-text-align:center;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+}
+
+.container{
+width:100%;
+max-width:400px;
 padding:20px;
 }
 
@@ -23,26 +33,32 @@ background:#141b2d;
 padding:20px;
 border-radius:14px;
 margin-top:20px;
+text-align:center;
 }
 
 button{
 background:#00ffd0;
 border:none;
-padding:14px;
-border-radius:10px;
+padding:16px;
+border-radius:12px;
 font-weight:bold;
 cursor:pointer;
-margin-top:10px;
+width:100%;
+font-size:16px;
+margin-top:15px;
 }
 
 h1{
 color:#00ffd0;
 }
+
 </style>
 
 </head>
 
 <body>
+
+<div class="container">
 
 <h1>🌍 Atlas Valley</h1>
 
@@ -163,6 +179,6 @@ tg.HapticFeedback
 initUser();
 
 </script>
-
+</div>
 </body>
 </html>
